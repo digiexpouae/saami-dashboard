@@ -1,8 +1,10 @@
-import { configureStore } from '@reduxjs/toolkit';
+import { configureStore } from '@reduxjs/toolkit'
+import appReducer from '../slice/employeeSlice'
+
 
 const store = configureStore({
   reducer: {
-    // Add your reducers here
+    counter:appReducer
   },
 });
 

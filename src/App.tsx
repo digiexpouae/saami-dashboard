@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Route, Routes, useLocation } from 'react-router-dom';
-
 import Loader from './common/Loader';
+// import CreateForm from './pages/CreateForm';
 import PageTitle from './components/PageTitle';
 import SignIn from './pages/Authentication/SignIn';
 import SignUp from './pages/Authentication/SignUp';
@@ -16,7 +16,9 @@ import Tables from './pages/Tables';
 import Alerts from './pages/UiElements/Alerts';
 import Buttons from './pages/UiElements/Buttons';
 import DefaultLayout from './layout/DefaultLayout';
-
+import Warehouse from './pages/Warehouse';
+import Employees from './pages/Employees';
+import CreateForm from './pages/CreateForm';
 function App() {
   const [loading, setLoading] = useState<boolean>(true);
   const { pathname } = useLocation();
@@ -60,22 +62,16 @@ const token  = ""
             }
           />
           <Route
-            path="/calendar"
+            path="/warehouse"
             element={
-              <>
-                <PageTitle title="Calendar | TailAdmin - Tailwind CSS Admin Dashboard Template" />
-                <Calendar />
-              </>
+             
+                <Warehouse/>
             }
           />
           <Route
-            path="/profile"
-            element={
-              <>
-                <PageTitle title="Profile | TailAdmin - Tailwind CSS Admin Dashboard Template" />
-                <Profile />
-              </>
-            }
+            path="/employee"
+            element={<Employees />}
+          
           />
           <Route
             path="/forms/form-elements"
@@ -158,6 +154,9 @@ const token  = ""
               </>
             }
           />
+   <Route path='/form'   element={<CreateForm />}     />
+   
+          <Route path='/employee' element={<Employees /> }   />
         </Routes>
       </DefaultLayout>
     </>
