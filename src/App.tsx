@@ -16,9 +16,9 @@ import Tables from './pages/Tables';
 import Alerts from './pages/UiElements/Alerts';
 import Buttons from './pages/UiElements/Buttons';
 import DefaultLayout from './layout/DefaultLayout';
-import Warehouse from './pages/Warehouse';
-import Employees from './pages/Employees';
-import CreateForm from './pages/CreateForm';
+import Employee from './pages/Employee/Employee'
+import Warehouse from './pages/Warehouse'
+
 function App() {
   const [loading, setLoading] = useState<boolean>(true);
   const { pathname } = useLocation();
@@ -70,7 +70,7 @@ const token  = ""
           />
           <Route
             path="/employee"
-            element={<Employees />}
+            element={<Employee />}
           
           />
           <Route
@@ -156,7 +156,7 @@ const token  = ""
           />
    <Route path='/form'   element={<CreateForm />}     />
    
-          <Route path='/employee' element={<Employees /> }   />
+          <Route path='/employee' element={<Employee /> }   />
         </Routes>
       </DefaultLayout>
     </>
