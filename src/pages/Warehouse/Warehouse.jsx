@@ -67,28 +67,6 @@ const formSchema = [
 ];
 
 
-const columns = [
-  {
-    header: 'Name',
-    accessorKey: 'name', // Use accessorKey for field-based lookup
-    cell: (info) => info.getValue(), // Render the value directly
-  },
-  {
-    header: 'Age',
-    accessorKey: 'age',
-    cell: (info) => info.getValue(),
-  },
-  {
-    header: 'City',
-    accessorKey: 'city',
-    cell: (info) => info.getValue(),
-  },
-];
-const data = [
-  { name: 'Alice', age: 30, city: 'New York' },
-  { name: 'Bob', age: 25, city: 'Los Angeles' },
-  { name: 'Charlie', age: 35, city: 'Chicago' },
-];
 
 const payload = {
   warehouseName: '',
@@ -98,6 +76,61 @@ const payload = {
 const Warehouse = () => {
   const [isForm, setIsForm] = useState(false);
   const [formPayload, setFormPayload] = useState({ ...payload });
+
+  const handleEdit = (row) => {
+    setIsForm(true)
+    setFormPayload({...row})
+    console.log(row);
+  };
+  const handleDelete = (row) => {
+    console.log(row);
+  };
+
+  const columns = [
+    {
+      header: 'Name',
+      accessorKey: 'name', // Use accessorKey for field-based lookup
+      cell: (info) => info.getValue(), // Render the value directly
+    },
+    {
+      header: 'Age',
+      accessorKey: 'age',
+      cell: (info) => info.getValue(),
+    },
+    {
+      header: 'City',
+      accessorKey: 'city',
+      cell: (info) => info.getValue(),
+    },
+    {
+      header: 'Actions',
+      cell: (info) => {
+        const rowData = info.row.original; // Access row data
+        return (
+          <div className="flex gap-2">
+            <button
+              className="text-blue-500"
+              onClick={() => handleEdit(rowData)}
+            >
+              Edit
+            </button>
+            <button
+              className="text-red-500"
+              onClick={() => handleDelete(rowData)}
+            >
+              Delete
+            </button>
+          </div>
+        );
+      },
+      meta: { width: '150px' },
+    },
+  ];
+  const data = [
+    { name: 'Alice', age: 30, city: 'New York' },
+    { name: 'Bob', age: 25, city: 'Los Angeles' },
+    { name: 'Charlie', age: 35, city: 'Chicago' },
+  ];
 
   const handleChange = (e) => {
     const data = { ...payload };
