@@ -13,10 +13,16 @@ import Tables from './pages/Tables';
 import Alerts from './pages/UiElements/Alerts';
 import Buttons from './pages/UiElements/Buttons';
 import DefaultLayout from './layout/DefaultLayout';
-import Warehouse from './pages/Warehouse/Warehouse.jsx'
-import Employee from './pages/Employee/Employee.jsx'
+import Warehouse from './pages/Warehouse/Warehouse'
+import Employee from '@pages/Employee/Employee'
+import { useDispatch } from 'react-redux';
+import {createWarehouse} from './sliceApi/warehouseApi.js';
+import { AppDispatch } from '@redux/store.js';
 
 function App() {
+
+  const dispatch = useDispatch<AppDispatch>()
+
   const [loading, setLoading] = useState<boolean>(true);
   const { pathname } = useLocation();
 
@@ -25,6 +31,8 @@ function App() {
   }, [pathname]);
 
   useEffect(() => {
+    const body  ={name:"mansab"}
+    dispatch(createWarehouse(body));
     setTimeout(() => setLoading(false), 1000);
   }, []);
 const token  = ""

@@ -1,33 +1,31 @@
+import api from '@config/axios';
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import api from '@config/axios'; // Your Axios instance or API setup
+import { AxiosRequestConfig } from 'axios';
 
-interface AsyncThunkConfig {
-  method?: 'get' | 'post' | 'put' | 'delete';
-  url: string;
-  data?: any; // For payload in POST/PUT
-  params?: any; // For query parameters in GET
-}
-
-export const createApiThunk = <Returned, ThunkArg = void>(
-  typePrefix: string,
-  apiConfig: (arg: ThunkArg) => AsyncThunkConfig,
+const ApiWrapper = <
+  ReturnType = any,
+  ArgType = void,
+  RejectedValueType = string,
+>(
+  type: string,
+  apiConfig: (data: ArgType) => AxiosRequestConfig,
 ) => {
-  return createAsyncThunk<Returned, ThunkArg>(
-    typePrefix,
-    async (arg, { rejectWithValue }) => {
-      try {
-        const { method = 'get', url, data, params } = apiConfig(arg);
-        const response = await api.request({
-          method,
-          url,
-          data,
-          params,
-        });
-        return response.data as Returned;
-      } catch (error: any) {
-        // Customize error handling as needed
-        return rejectWithValue(error.response?.data || error.message);
-      }
-    },
-  );
+  
+  return createAsyncThunk<
+    ReturnType,
+    ArgType,
+    { rejectValue: RejectedValueType }
+  >(type, async (args: ArgType, { rejectWithValue }) => {
+    try {
+      const config = apiConfig(args);
+      const response = await api.request(config);
+      return response.data;
+    } catch (error: any) {
+      return rejectWithValue(
+        error.response ? error.response.data : error.message,
+      );
+    }
+  });
 };
+
+export default ApiWrapper;

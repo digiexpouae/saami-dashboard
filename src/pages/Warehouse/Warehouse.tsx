@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import RenderWarehouseForm from '../../common/RenderForm/RenderForm';
-import WarehouseTable from './WarehouseTable';
+
 import TableComponent from '../../common/DataGrid/DataGrid'
 const formSchema = [
   {

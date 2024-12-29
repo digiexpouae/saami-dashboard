@@ -26,6 +26,7 @@
       "@pages/*": ["pages/*"],
       "@redux/*": ["redux/*"],
       "@slice/*": ["slice/*"],
+       "@api/*": ["sliceApi/*"]
     }
   },
   "include": ["src", "src/lib.d.ts"],
