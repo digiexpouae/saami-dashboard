@@ -1,21 +1,109 @@
-import React, { useState } from 'react'
-import Employeetable from './Employetable'
-import Employeeform from './Employeeform'
+import React, { useState } from 'react';
+import RenderEmployeeForm from '../../common/RenderForm/RenderForm';
+
+const formSchema = [
+  {
+    name: 'warehouseName',
+    label: 'Username',
+    type: 'text',
+    required: true,
+    placeholder: 'Enter your username',
+  },
+  {
+    name: 'password',
+    label: 'Password',
+    type: 'password',
+    required: true,
+    placeholder: 'Enter your password',
+  },
+  {
+    name: 'email',
+    label: 'Email',
+    type: 'email',
+    required: true,
+    placeholder: 'Enter your email',
+  },
+  {
+    name: 'age',
+    label: 'Age',
+    type: 'number',
+    required: false,
+    placeholder: 'Enter your age',
+  },
+  {
+    name: 'gender',
+    label: 'Gender',
+    type: 'select',
+    required: true,
+    placeholder: 'Select your gender',
+    options: [
+      { label: 'Male', value: 'male' },
+      { label: 'Female', value: 'female' },
+      { label: 'Other', value: 'other' },
+    ],
+  },
+  {
+    name: 'profilePicture',
+    label: 'Profile Picture',
+    type: 'file',
+    required: false,
+    accept: 'image/*',
+  },
+  {
+    name: 'bio',
+    label: 'Bio',
+    type: 'textarea',
+    required: false,
+    placeholder: 'Tell us about yourself',
+  },
+];
+
+const payload = {
+  warehouseName: '',
+  location: '',
+  totalEmployees: 0,
+};
 const Employee = () => {
-  // to create form
-// on submitting form data goes to redux and by redux it goes to host api 
-// for the table i have to show the data from api
+  const [isForm, setIsForm] = useState(false);
+  const [formPayload, setFormPayload] = useState({ ...payload });
 
+  const handleChange = (e) => {
+    const data = { ...payload };
+    const { name, value } = e.target;
+    data[name] = value;
+    setFormPayload(data);
+  };
 
-
- const [table, settable] = useState(true)
   return (
     <div>
-      <button onClick={()=>settable(false)}  className="inline-flex items-center justify-center rounded-md bg-primary py-4 px-10 text-center font-medium text-white hover:bg-opacity-90 lg:px-8 xl:px-10">Create</button>
-      {table?<Employeetable />:<Employeeform  settable={settable}/>
-      } 
-    </div>
-)
-}
+      <button onClick={() => setIsForm(true)}>Create </button>
 
-export default Employee
+      {isForm ? (
+        <RenderEmployeeForm
+          schema={formSchema}
+          payload={formPayload}
+          onCancel={() => setIsForm(false)}
+          handleChange={handleChange}
+        />
+      ) : (
+        <div>some table</div>
+      )}
+    </div>
+  );
+};
+
+export default Employee;
+
+
+
+/*
+CREATE EMPLOYEE
+GET ALL EMPLOYEE
+UPDATE EMPLOYEE
+DELETE EMPLOYEE
+GET EMPLOYEE BY ID
+
+
+SAME FOR WAREHOUSE
+
+*/

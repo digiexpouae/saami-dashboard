@@ -16,8 +16,8 @@ import Tables from './pages/Tables';
 import Alerts from './pages/UiElements/Alerts';
 import Buttons from './pages/UiElements/Buttons';
 import DefaultLayout from './layout/DefaultLayout';
-import Employee from './pages/Employee/Employee'
-import Warehouse from './pages/Warehouse'
+import Warehouse from './pages/Warehouse/Warehouse.jsx'
+import Employee from './pages/Employee/Employee.jsx'
 
 function App() {
   const [loading, setLoading] = useState<boolean>(true);
@@ -53,6 +53,24 @@ const token  = ""
       <DefaultLayout>
         <Routes>
           <Route
+            path="/warehouse"
+            element={
+              <>
+                <PageTitle title="eCommerce Dashboard | TailAdmin - Tailwind CSS Admin Dashboard Template" />
+                <Warehouse />
+              </>
+            }
+          />
+          <Route
+            path="/employee"
+            element={
+              <>
+                <PageTitle title="eCommerce Dashboard | TailAdmin - Tailwind CSS Admin Dashboard Template" />
+                <Employee />
+              </>
+            }
+          />
+          <Route
             index
             element={
               <>
@@ -64,14 +82,14 @@ const token  = ""
           <Route
             path="/warehouse"
             element={
-             
+
                 <Warehouse/>
             }
           />
           <Route
             path="/employee"
             element={<Employee />}
-          
+
           />
           <Route
             path="/forms/form-elements"
@@ -155,7 +173,7 @@ const token  = ""
             }
           />
    <Route path='/form'   element={<CreateForm />}     />
-   
+
           <Route path='/employee' element={<Employee /> }   />
         </Routes>
       </DefaultLayout>
