@@ -51,16 +51,63 @@ export const  getemployee=createAsyncThunk('employee-data',async(payload)=>{
 const initialState={
     data:[]
 }
-const slice=
-createSlice({
+const slice=createSlice({
 name:'employee',initialState,reducers:{},extraReducers:(builder)=>{
 builder.addCase(createemployee.fulfilled,(state,action)=>{
-    state.data.push(action.payload)
+    state.data.push(action.payload)});
     builder.addCase(employee.rejected, (state, action) => {
         // Optionally handle the error case
         console.error('Failed to add employee data:', action.error);
-      });
-})
+      })
+.addCase(create_employee.pending,(state,action)=>{
+state.isLoading =true;
+state.isError=false;
+state.iserrorMessage="";
+      })
+      .addCase( get_all_employee.fulfilled,(state,action)=>{
+        state.isLoading=false;
+          state.data.push(action.payload)})
+
+      .addCase( get_all_employee.rejected, (state, action) => {
+        // Optionally handle the error case
+        console.error('Failed to add employee data:', action.error);
+      })
+.addCase( get_all_employee.pending,(state,action)=>{
+state.isLoading =true;
+state.isError=false;
+state.iserrorMessage="";
+      })
+
+      .addCase(update_employee.fulfilled,(state,action)=>{
+        state.isLoading=false;
+          state.data.push(action.payload)})
+
+      .addCase(update_employee.rejected, (state, action) => {
+        // Optionally handle the error case
+        console.error('Failed to add employee data:', action.error);
+      })
+.addCase(update_employee.pending,(state,action)=>{
+state.isLoading =true;
+state.isError=false;
+state.iserrorMessage="";
+      })
+
+      
+      .addCase(delete_employee.fulfilled,(state,action)=>{
+        state.isLoading=false;
+          state.data.push(action.payload)})
+
+      .addCase(delete_employee.rejected, (state, action) => {
+        // Optionally handle the error case
+        console.error('Failed to add employee data:', action.error);
+      })
+.addCase(delete_employee.pending,(state,action)=>{
+state.isLoading =true;
+state.isError=false;
+state.iserrorMessage="";
+      })
+
+
 
 }    
 })
