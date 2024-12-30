@@ -1,12 +1,10 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import api from '@config/axios';
-
-const WAREHOUSE_API_PATH = '/api/warehouses/';
+import { api } from '@config/axios';
+import { GET_ALL_WAREHOUSE, CREATE_WAREHOUSE, UPDATE_WAREHOUSE, DELETE_WAREHOUSE } from '@config/axios';
 
 interface Warehouse {
   id: string;
   name: string;
-  // Add other warehouse properties here
 }
 
 interface WarehouseState {
@@ -26,8 +24,8 @@ export const fetchWarehouses = createAsyncThunk(
   'warehouse/fetchWarehouses',
   async (_, thunkAPI) => {
     try {
-      const response = await api.get(WAREHOUSE_API_PATH);
-      // console.log(response.data.data);
+      const response = await api.get(GET_ALL_WAREHOUSE);
+      // console.log(response);
       return response.data.data;
     } catch (error: any) {
       return thunkAPI.rejectWithValue(
@@ -42,7 +40,7 @@ export const createWarehouse = createAsyncThunk(
   'warehouse/createWarehouse',
   async ({ payload, token }: { payload: any; token: string }, thunkAPI) => {
     try {
-      const response = await api.post(WAREHOUSE_API_PATH, payload, {
+      const response = await api.post(CREATE_WAREHOUSE, payload, {
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
@@ -64,11 +62,9 @@ export const updateWarehouse = createAsyncThunk(
     { updatedWarehouse, token }: { updatedWarehouse: Warehouse; token: string },
     thunkAPI,
   ) => {
-    console.log(updatedWarehouse);
-
     try {
       const response = await api.put(
-        `${WAREHOUSE_API_PATH}${updatedWarehouse.id}`,
+        `${UPDATE_WAREHOUSE}/${updatedWarehouse.id}`,
         updatedWarehouse,
         {
           headers: {
@@ -91,7 +87,7 @@ export const deleteWarehouse = createAsyncThunk(
   'warehouse/deleteWarehouse',
   async ({ id, token }: { id: string; token: string }, thunkAPI) => {
     try {
-      await api.delete(`${WAREHOUSE_API_PATH}${id}`, {
+      await api.delete(`${DELETE_WAREHOUSE}/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

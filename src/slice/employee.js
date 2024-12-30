@@ -1,114 +1,120 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { CREATE_EMPLOYEE ,api} from "../config/axios";
 
-export const  createemployee=createAsyncThunk('employee-data',async(payload)=>{
-
-try{
-  const server=await axios.post(CREATE_EMPLOYEE,payload)
-  
-    return server.data
-}
-catch(error){
-throw new Error("failed to send data"+error.message)
-}
-})
-
-
-export const  getemployee=createAsyncThunk('employee-data',async(payload)=>{
-
-  try{
-    const server=await api.post(GET_ALL_EMPLOYEE,payload)
-    
-      return server.data
+export const createemployee = createAsyncThunk('employee/create', async (payload) => {
+  try {
+    const server = await axios.post(CREATE_EMPLOYEE, payload);
+    return server.data;
+  } catch (error) {
+    throw new Error("Failed to send data: " + error.message);
   }
-  catch(error){
-  throw new Error("failed to send data"+error.message)
+});
+
+export const getemployee = createAsyncThunk('employee/get', async (payload) => {
+  try {
+    const server = await api.post(GET_ALL_EMPLOYEE, payload);
+    return server.data;
+  } catch (error) {
+    throw new Error("Failed to fetch data: " + error.message);
   }
-  })
-  export const  updateemployee=createAsyncThunk('employee-data',async(payload)=>{
+});
 
-    try{
-      const server=await api.post(UPDATE_EMPLOYEE,payload)
-      
-        return server.data
-    }
-    catch(error){
-    throw new Error("failed to send data"+error.message)
-    }
-    })
-    export const deleteemployee=createAsyncThunk('employee-data',async(payload)=>{
+export const updateemployee = createAsyncThunk('employee/update', async (payload) => {
+  try {
+    const server = await api.post(UPDATE_EMPLOYEE, payload);
+    return server.data;
+  } catch (error) {
+    throw new Error("Failed to update data: " + error.message);
+  }
+});
 
-      try{
-        const server=await api.post(DELETE_EMPLOYEE,payload)
-        
-          return server.data
-      }
-      catch(error){
-      throw new Error("failed to send data"+error.message)
-      }
-      })
+export const deleteemployee = createAsyncThunk('employee/delete', async (payload) => {
+  try {
+    const server = await api.post(DELETE_EMPLOYEE, payload);
+    return server.data;
+  } catch (error) {
+    throw new Error("Failed to delete data: " + error.message);
+  }
+});
+
     
 const initialState={
     data:[]
 }
-const slice=createSlice({
-name:'employee',initialState,reducers:{},extraReducers:(builder)=>{
-builder.addCase(createemployee.fulfilled,(state,action)=>{
-    state.data.push(action.payload)});
-    builder.addCase(employee.rejected, (state, action) => {
-        // Optionally handle the error case
-        console.error('Failed to add employee data:', action.error);
+const slice = createSlice({
+  name: 'employee',
+  initialState: {
+    data: [],
+    isLoading: false,
+    isError: false,
+    iserrorMessage: "",
+  },
+  reducers: {},
+  extraReducers: (builder) => {
+    builder
+      .addCase(createemployee.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.data.push(action.payload);
       })
-.addCase(create_employee.pending,(state,action)=>{
-state.isLoading =true;
-state.isError=false;
-state.iserrorMessage="";
+      .addCase(createemployee.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.iserrorMessage = action.error.message || "Failed to add employee";
       })
-      .addCase( get_all_employee.fulfilled,(state,action)=>{
-        state.isLoading=false;
-          state.data.push(action.payload)})
-
-      .addCase( get_all_employee.rejected, (state, action) => {
-        // Optionally handle the error case
-        console.error('Failed to add employee data:', action.error);
-      })
-.addCase( get_all_employee.pending,(state,action)=>{
-state.isLoading =true;
-state.isError=false;
-state.iserrorMessage="";
-      })
-
-      .addCase(update_employee.fulfilled,(state,action)=>{
-        state.isLoading=false;
-          state.data.push(action.payload)})
-
-      .addCase(update_employee.rejected, (state, action) => {
-        // Optionally handle the error case
-        console.error('Failed to add employee data:', action.error);
-      })
-.addCase(update_employee.pending,(state,action)=>{
-state.isLoading =true;
-state.isError=false;
-state.iserrorMessage="";
+      .addCase(createemployee.pending, (state) => {
+        state.isLoading = true;
+        state.isError = false;
+        state.iserrorMessage = "";
       })
 
-      
-      .addCase(delete_employee.fulfilled,(state,action)=>{
-        state.isLoading=false;
-          state.data.push(action.payload)})
-
-      .addCase(delete_employee.rejected, (state, action) => {
-        // Optionally handle the error case
-        console.error('Failed to add employee data:', action.error);
+      .addCase(getemployee.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.data = action.payload; // Replace data with fetched employees
       })
-.addCase(delete_employee.pending,(state,action)=>{
-state.isLoading =true;
-state.isError=false;
-state.iserrorMessage="";
+      .addCase(getemployee.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.iserrorMessage = action.error.message || "Failed to fetch employees";
+      })
+      .addCase(getemployee.pending, (state) => {
+        state.isLoading = true;
+        state.isError = false;
+        state.iserrorMessage = "";
       })
 
+      .addCase(updateemployee.fulfilled, (state, action) => {
+        state.isLoading = false;
+        const index = state.data.findIndex((emp) => emp.id === action.payload.id);
+        if (index !== -1) {
+          state.data[index] = action.payload;
+        }
+      })
+      .addCase(updateemployee.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.iserrorMessage = action.error.message || "Failed to update employee";
+      })
+      .addCase(updateemployee.pending, (state) => {
+        state.isLoading = true;
+        state.isError = false;
+        state.iserrorMessage = "";
+      })
 
+      .addCase(deleteemployee.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.data = state.data.filter((emp) => emp.id !== action.payload.id);
+      })
+      .addCase(deleteemployee.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.iserrorMessage = action.error.message || "Failed to delete employee";
+      })
+      .addCase(deleteemployee.pending, (state) => {
+        state.isLoading = true;
+        state.isError = false;
+        state.iserrorMessage = "";
+      });
+  },
+});
 
-}    
-})
 export default slice.reducer;
