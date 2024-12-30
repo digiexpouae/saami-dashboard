@@ -49,7 +49,7 @@ interface FormPayload {
 }
 
 const Warehouse = () => {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<any>();
   const warehouses = useSelector(
     (state: RootState) => state.warehouse.warehouses,
   );

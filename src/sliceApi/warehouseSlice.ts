@@ -1,5 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import axios from 'axios';
+import api from '@config/axios';
+
+const WAREHOUSE_API_PATH = '/api/warehouses/';
 
 interface Warehouse {
   id: string;
@@ -24,13 +26,15 @@ export const fetchWarehouses = createAsyncThunk(
   'warehouse/fetchWarehouses',
   async (_, thunkAPI) => {
     try {
-      const response = await axios.get('http://localhost:5000/api/warehouses');
+      const response = await api.get(WAREHOUSE_API_PATH);
       // console.log(response.data.data);
       return response.data.data;
     } catch (error: any) {
-      return thunkAPI.rejectWithValue(error.response.data.message || 'Failed to fetch warehouses');
+      return thunkAPI.rejectWithValue(
+        error.response.data.message || 'Failed to fetch warehouses',
+      );
     }
-  }
+  },
 );
 
 // Async thunk for creating a warehouse
@@ -38,41 +42,48 @@ export const createWarehouse = createAsyncThunk(
   'warehouse/createWarehouse',
   async ({ payload, token }: { payload: any; token: string }, thunkAPI) => {
     try {
-      const response = await axios.post('http://localhost:5000/api/warehouses', payload, {
+      const response = await api.post(WAREHOUSE_API_PATH, payload, {
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
+          Authorization: `Bearer ${token}`,
         },
       });
       return response.data;
     } catch (error: any) {
-      return thunkAPI.rejectWithValue(error.response.data.message || 'Failed to create warehouse');
+      return thunkAPI.rejectWithValue(
+        error.response.data.message || 'Failed to create warehouse',
+      );
     }
-  }
+  },
 );
 
 // Async thunk for updating a warehouse
 export const updateWarehouse = createAsyncThunk(
   'warehouse/updateWarehouse',
-  async ({ updatedWarehouse, token }: { updatedWarehouse: Warehouse; token: string }, thunkAPI) => {
+  async (
+    { updatedWarehouse, token }: { updatedWarehouse: Warehouse; token: string },
+    thunkAPI,
+  ) => {
     console.log(updatedWarehouse);
-    
+
     try {
-      const response = await axios.put(
-        `http://localhost:5000/api/warehouses/${updatedWarehouse.id}`,
+      const response = await api.put(
+        `${WAREHOUSE_API_PATH}${updatedWarehouse.id}`,
         updatedWarehouse,
         {
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`,
+            Authorization: `Bearer ${token}`,
           },
-        }
+        },
       );
       return response.data;
     } catch (error: any) {
-      return thunkAPI.rejectWithValue(error.response.data.message || 'Failed to update warehouse');
+      return thunkAPI.rejectWithValue(
+        error.response.data.message || 'Failed to update warehouse',
+      );
     }
-  }
+  },
 );
 
 // Async thunk for deleting a warehouse
@@ -80,16 +91,18 @@ export const deleteWarehouse = createAsyncThunk(
   'warehouse/deleteWarehouse',
   async ({ id, token }: { id: string; token: string }, thunkAPI) => {
     try {
-      await axios.delete(`http://localhost:5000/api/warehouses/${id}`, {
+      await api.delete(`${WAREHOUSE_API_PATH}${id}`, {
         headers: {
-          'Authorization': `Bearer ${token}`,
+          Authorization: `Bearer ${token}`,
         },
       });
       return id;
     } catch (error: any) {
-      return thunkAPI.rejectWithValue(error.response.data.message || 'Failed to delete warehouse');
+      return thunkAPI.rejectWithValue(
+        error.response.data.message || 'Failed to delete warehouse',
+      );
     }
-  }
+  },
 );
 
 const warehouseSlice = createSlice({
@@ -114,15 +127,19 @@ const warehouseSlice = createSlice({
         state.warehouses.push(action.payload);
       })
       .addCase(updateWarehouse.fulfilled, (state, action) => {
-        const index = state.warehouses.findIndex(wh => wh.id === action.payload.id);
+        const index = state.warehouses.findIndex(
+          (wh) => wh.id === action.payload.id,
+        );
         if (index !== -1) {
           state.warehouses[index] = action.payload;
         }
       })
       .addCase(deleteWarehouse.fulfilled, (state, action) => {
-        state.warehouses = state.warehouses.filter(wh => wh.id !== action.payload);
+        state.warehouses = state.warehouses.filter(
+          (wh) => wh.id !== action.payload,
+        );
       });
   },
 });
 
-export default warehouseSlice.reducer; 
+export default warehouseSlice.reducer;
