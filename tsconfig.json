@@ -1,3 +1,39 @@
+// {
+//   "compilerOptions": {
+//     "target": "ESNext",
+//     "lib": ["DOM", "DOM.Iterable", "ESNext"],
+//     "module": "ESNext",
+//     "skipLibCheck": true,
+
+//     /* Bundler mode */
+//     "moduleResolution": "bundler",
+//     "allowImportingTsExtensions": true,
+//     "resolveJsonModule": true,
+//     "isolatedModules": true,
+//     "noEmit": true,
+//     "jsx": "react-jsx",
+
+//     /* Linting */
+//     "strict": true,
+//     "noUnusedLocals": true,
+//     "noUnusedParameters": true,
+//     "noFallthroughCasesInSwitch": true,
+//     "baseUrl": "./src",
+//     "paths": {
+//       "@components/*": ["components/*"], // Alias for components
+//       "@config/*": ["config/*"], // Alias for utilities
+//       "@hooks/*": ["hooks/*"],
+//       "@pages/*": ["pages/*"],
+//       "@redux/*": ["redux/*"],
+//       "@slice/*": ["slice/*"],
+//        "@api/*": ["sliceApi/*"]
+//     }
+//   },
+//   "include": ["src", "src/lib.d.ts"],
+//   "references": [{ "path": "./tsconfig.node.json" }]
+// }
+
+
 {
   "compilerOptions": {
     "target": "ESNext",
@@ -20,14 +56,16 @@
     "noFallthroughCasesInSwitch": true,
     "baseUrl": "./src",
     "paths": {
-      "@components/*": ["components/*"], // Alias for components
-      "@config/*": ["config/*"], // Alias for utilities
+      "@components/*": ["components/*"],  // Alias for components
+      "@config/*": ["config/*"],  // Alias for utilities
       "@hooks/*": ["hooks/*"],
       "@pages/*": ["pages/*"],
       "@redux/*": ["redux/*"],
       "@slice/*": ["slice/*"],
-       "@api/*": ["sliceApi/*"]
-    }
+      "@api/*": ["sliceApi/*"]
+    },
+    "allowJs": true,  // Allow JavaScript files to be imported
+    "checkJs": false  // Optionally, set this to false if you don't need type checking for JS files
   },
   "include": ["src", "src/lib.d.ts"],
   "references": [{ "path": "./tsconfig.node.json" }]
