@@ -1,7 +1,7 @@
 
 import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
-import { createWarehouse, updateWarehouse} from '@api/warehouseApi'
+// import { createWarehouse, updateWarehouse} from '@api/warehouseApi'
 interface CounterState {
   value: number;
 }

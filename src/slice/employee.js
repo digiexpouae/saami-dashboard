@@ -1,10 +1,12 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { CREATE_EMPLOYEE ,api} from "../config/axios";
+import {CREATE_EMPLOYEE,api,GET_ALL_EMPLOYEE,} from '../config/axios';
+import { data } from "autoprefixer";
+
 
 export const  createemployee=createAsyncThunk('employee-data',async(payload)=>{
 
 try{
-  const server=await axios.post(CREATE_EMPLOYEE,payload)
+  const server=await api.post(CREATE_EMPLOYEE,payload)
   
     return server.data
 }
@@ -14,10 +16,10 @@ throw new Error("failed to send data"+error.message)
 })
 
 
-export const  getemployee=createAsyncThunk('employee-data',async(payload)=>{
+export const  getemployee=createAsyncThunk('employee-get',async(payload)=>{
 
   try{
-    const server=await api.post(GET_ALL_EMPLOYEE,payload)
+    const server=await api.get(GET_ALL_EMPLOYEE,payload)
     
       return server.data
   }
@@ -25,10 +27,10 @@ export const  getemployee=createAsyncThunk('employee-data',async(payload)=>{
   throw new Error("failed to send data"+error.message)
   }
   })
-  export const  updateemployee=createAsyncThunk('employee-data',async(payload)=>{
+  export const  updateemployee=createAsyncThunk('employee-update',async(payload)=>{
 
     try{
-      const server=await api.post(UPDATE_EMPLOYEE,payload)
+      const server=await api.put(UPDATE_EMPLOYEE,payload)
       
         return server.data
     }
@@ -36,10 +38,10 @@ export const  getemployee=createAsyncThunk('employee-data',async(payload)=>{
     throw new Error("failed to send data"+error.message)
     }
     })
-    export const deleteemployee=createAsyncThunk('employee-data',async(payload)=>{
+    export const deleteemployee=createAsyncThunk('employee-delete',async(payload)=>{
 
       try{
-        const server=await api.post(DELETE_EMPLOYEE,payload)
+        const server=await api.delete(DELETE_EMPLOYEE,payload)
         
           return server.data
       }
@@ -48,67 +50,84 @@ export const  getemployee=createAsyncThunk('employee-data',async(payload)=>{
       }
       })
     
-const initialState={
-    data:[]
-}
-const slice=createSlice({
-name:'employee',initialState,reducers:{},extraReducers:(builder)=>{
-builder.addCase(createemployee.fulfilled,(state,action)=>{
-    state.data.push(action.payload)});
-    builder.addCase(employee.rejected, (state, action) => {
-        // Optionally handle the error case
-        console.error('Failed to add employee data:', action.error);
-      })
-.addCase(create_employee.pending,(state,action)=>{
-state.isLoading =true;
-state.isError=false;
-state.iserrorMessage="";
-      })
-      .addCase( get_all_employee.fulfilled,(state,action)=>{
-        state.isLoading=false;
-          state.data.push(action.payload)})
-
-      .addCase( get_all_employee.rejected, (state, action) => {
-        // Optionally handle the error case
-        console.error('Failed to add employee data:', action.error);
-      })
-.addCase( get_all_employee.pending,(state,action)=>{
-state.isLoading =true;
-state.isError=false;
-state.iserrorMessage="";
-      })
-
-      .addCase(update_employee.fulfilled,(state,action)=>{
-        state.isLoading=false;
-          state.data.push(action.payload)})
-
-      .addCase(update_employee.rejected, (state, action) => {
-        // Optionally handle the error case
-        console.error('Failed to add employee data:', action.error);
-      })
-.addCase(update_employee.pending,(state,action)=>{
-state.isLoading =true;
-state.isError=false;
-state.iserrorMessage="";
-      })
-
+      const initialState = {
+        data: [],
+        isLoading: false,
+        isError: false,
+        isErrorMessage: "",
+      };
       
-      .addCase(delete_employee.fulfilled,(state,action)=>{
-        state.isLoading=false;
-          state.data.push(action.payload)})
-
-      .addCase(delete_employee.rejected, (state, action) => {
-        // Optionally handle the error case
-        console.error('Failed to add employee data:', action.error);
-      })
-.addCase(delete_employee.pending,(state,action)=>{
-state.isLoading =true;
-state.isError=false;
-state.iserrorMessage="";
-      })
-
-
-
-}    
-})
-export default slice.reducer;
+      const slice = createSlice({
+        name: "employee",
+        initialState,
+        reducers: {},
+        extraReducers: (builder) => {
+          builder
+            // Create Employee
+            .addCase(createemployee.fulfilled, (state, action) => {
+              state.isLoading = false;
+              state.data.push(action.payload);
+            })
+            .addCase(createemployee.rejected, (state, action) => {
+              state.isLoading = false;
+              state.isError = true;
+              state.isErrorMessage = action.error.message;
+            })
+            .addCase(createemployee.pending, (state) => {
+              state.isLoading = true;
+              state.isError = false;
+              state.isErrorMessage = "";
+            })
+            // Get Employees
+            .addCase(getemployee.fulfilled, (state,) => {
+              state.isLoading = false;
+              state.data = data; // Replace data
+            })
+            .addCase(getemployee.rejected, (state) => {
+              state.isLoading = false;
+              state.isError = true;
+              // state.isErrorMessage = action.error.message;
+            })
+            .addCase(getemployee.pending, (state) => {
+              state.isLoading = true;
+              state.isError = false;
+              state.isErrorMessage = "";
+            })
+            // Update Employee
+            .addCase(updateemployee.fulfilled, (state, action) => {
+              state.isLoading = false;
+              const index = state.data.findIndex((emp) => emp.id === action.payload.id);
+              if (index !== -1) {
+                state.data[index] = action.payload; // Update specific employee
+              }
+            })
+            .addCase(updateemployee.rejected, (state, action) => {
+              state.isLoading = false;
+              state.isError = true;
+              state.isErrorMessage = action.error.message;
+            })
+            .addCase(updateemployee.pending, (state) => {
+              state.isLoading = true;
+              state.isError = false;
+              state.isErrorMessage = "";
+            })
+            // Delete Employee
+            .addCase(deleteemployee.fulfilled, (state, action) => {
+              state.isLoading = false;
+              state.data = state.data.filter((emp) => emp.id !== action.payload); // Remove employee
+            })
+            .addCase(deleteemployee.rejected, (state, action) => {
+              state.isLoading = false;
+              state.isError = true;
+              state.isErrorMessage = action.error.message;
+            })
+            .addCase(deleteemployee.pending, (state) => {
+              state.isLoading = true;
+              state.isError = false;
+              state.isErrorMessage = "";
+            });
+        },
+      });
+      
+      export default slice.reducer;
+      

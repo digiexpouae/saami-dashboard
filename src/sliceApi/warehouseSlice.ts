@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import api from '@config/axios';
+import {api} from '@config/axios';
 
 const WAREHOUSE_API_PATH = '/api/warehouses/';
 
