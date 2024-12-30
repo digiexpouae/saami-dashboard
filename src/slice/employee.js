@@ -15,16 +15,6 @@ throw new Error("failed to send data"+error.message)
 }
 })
 
-
-export const  getemployee=createAsyncThunk('employee-get',async(payload)=>{
-
-  try{
-    const server=await api.get(GET_ALL_EMPLOYEE,payload)
-    
-      return server.data
-  }
-});
-
 export const getemployee = createAsyncThunk('employee/get', async (payload) => {
   try {
     const server = await api.post(GET_ALL_EMPLOYEE, payload);

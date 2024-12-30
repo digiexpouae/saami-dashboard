@@ -25,7 +25,7 @@ export const fetchWarehouses = createAsyncThunk(
   async (_, thunkAPI) => {
     try {
       const response = await api.get(GET_ALL_WAREHOUSE);
-      // console.log(response);
+      console.log(response);
       return response.data.data;
     } catch (error: any) {
       return thunkAPI.rejectWithValue(
