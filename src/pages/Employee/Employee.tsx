@@ -31,11 +31,11 @@ const formSchema = [
     placeholder: 'Enter your age',
   },
   {
-    name: 'gender',
-    label: 'Gender',
+    name: 'assignedWarehouse',
+    label: 'Assign Warehouse',
     type: 'select',
     required: true,
-    placeholder: 'Select your gender',
+    placeholder: 'Select Warehouse',
     options: [
       { label: 'Male', value: 'male' },
       { label: 'Female', value: 'female' },

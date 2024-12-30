@@ -1,111 +1,164 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import RenderWarehouseForm from '../../common/RenderForm/RenderForm';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  fetchWarehouses,
+  createWarehouse,
+  updateWarehouse,
+  deleteWarehouse,
+} from '../../sliceApi/warehouseSlice';
+import { RootState } from '../redux/store';
+import TableComponent from '../../common/DataGrid/DataGrid';
 
-import TableComponent from '../../common/DataGrid/DataGrid'
 const formSchema = [
   {
-    name: 'age',
-    label: 'Warehouse Age',
+    name: 'name',
+    label: 'Warehouse Name',
     type: 'text',
     required: true,
-    placeholder: 'Warehouse Age',
+    placeholder: 'Enter warehouse name',
   },
   {
-    name: 'warehouseName',
-    label: 'Username',
-    type: 'text',
-    required: true,
-    placeholder: 'Enter your username',
-  },
-  {
-    name: 'password',
-    label: 'Password',
-    type: 'password',
-    required: true,
-    placeholder: 'Enter your password',
-  },
-  {
-    name: 'email',
-    label: 'Email',
-    type: 'email',
-    required: true,
-    placeholder: 'Enter your email',
-  },
-  {
-    name: 'age',
-    label: 'Age',
+    name: 'latitude',
+    label: 'Latitude',
     type: 'number',
-    required: false,
-    placeholder: 'Enter your age',
-  },
-  {
-    name: 'gender',
-    label: 'Gender',
-    type: 'select',
     required: true,
-    placeholder: 'Select your gender',
-    options: [
-      { label: 'Male', value: 'male' },
-      { label: 'Female', value: 'female' },
-      { label: 'Other', value: 'other' },
-    ],
+    placeholder: 'Enter latitude',
   },
   {
-    name: 'profilePicture',
-    label: 'Profile Picture',
-    type: 'file',
-    required: false,
-    accept: 'image/*',
-  },
-  {
-    name: 'bio',
-    label: 'Bio',
-    type: 'textarea',
-    required: false,
-    placeholder: 'Tell us about yourself',
+    name: 'longitude',
+    label: 'Longitude',
+    type: 'number',
+    required: true,
+    placeholder: 'Enter longitude',
   },
 ];
 
-
-
-const payload = {
-  warehouseName: '',
-  location: '',
-  totalEmployees: 0,
+const defaultPayload = {
+  name: '',
+  latitude: 0,
+  longitude: 0,
 };
+
+// Define the type for formPayload
+interface FormPayload {
+  id?: string; // Make id optional if it's not always present
+  name: string;
+  latitude: number;
+  longitude: number;
+}
+
 const Warehouse = () => {
+  const dispatch = useDispatch<any>();
+  const warehouses = useSelector(
+    (state: RootState) => state.warehouse.warehouses,
+  );
+
+  // Retrieve token from local storage
+  const token = localStorage.getItem('authToken');
+
   const [isForm, setIsForm] = useState(false);
-  const [formPayload, setFormPayload] = useState({ ...payload });
+  const [formPayload, setFormPayload] = useState<FormPayload>({
+    ...defaultPayload,
+  });
+
+  useEffect(() => {
+    dispatch(fetchWarehouses());
+  }, [dispatch]);
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+  ) => {
+    const { name, value } = e.target;
+    setFormPayload((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const handleSubmit = () => {
+    const payload = {
+      id: formPayload.id,
+      name: formPayload.name,
+      location: {
+        latitude: formPayload.latitude,
+        longitude: formPayload.longitude,
+      },
+    };
+
+    if (formPayload.id) {
+      dispatch(updateWarehouse({ updatedWarehouse: payload, token }))
+        .then(() => {
+          dispatch(fetchWarehouses());
+        })
+        .catch((error) => {
+          console.error('Update error:', error);
+        });
+    } else {
+      dispatch(createWarehouse({ payload, token }))
+        .then(() => {
+          dispatch(fetchWarehouses());
+        })
+        .catch((error) => {
+          console.error('Creation error:', error);
+        });
+    }
+
+    setIsForm(false);
+    setFormPayload({ ...defaultPayload });
+  };
+
+  // console.log(token);
 
   const handleEdit = (row) => {
-    setIsForm(true)
-    setFormPayload({...row})
     console.log(row);
+
+    setIsForm(true);
+    setFormPayload({
+      id: row._id,
+      name: row.name,
+      latitude: row.location.latitude,
+      longitude: row.location.longitude,
+      totalEmployees: row.totalEmployees,
+    });
+    console.log(row._id);
+
+    console.log(formPayload);
   };
+
   const handleDelete = (row) => {
-    console.log(row);
+    dispatch(deleteWarehouse({ id: row._id, token }))
+      .then(() => {
+        dispatch(fetchWarehouses()); // Refresh the list after deletion
+      })
+      .catch((error) => {
+        console.error('Delete error:', error);
+      });
   };
 
   const columns = [
     {
-      header: 'Name',
-      accessorKey: 'name', // Use accessorKey for field-based lookup
-      cell: (info) => info.getValue(), // Render the value directly
-    },
-    {
-      header: 'Age',
-      accessorKey: 'age',
+      header: 'Warehouse Name',
+      accessorKey: 'name',
       cell: (info) => info.getValue(),
     },
     {
-      header: 'City',
-      accessorKey: 'city',
+      header: 'Location',
+      cell: (info) => {
+        const location = info.row.original.location || {};
+        const { latitude = 'N/A', longitude = 'N/A' } = location;
+        return `${latitude}, ${longitude}`;
+      },
+    },
+    {
+      header: 'Total Employees',
+      accessorKey: 'totalEmployees',
       cell: (info) => info.getValue(),
     },
     {
       header: 'Actions',
       cell: (info) => {
-        const rowData = info.row.original; // Access row data
+        const rowData = info.row.original;
         return (
           <div className="flex gap-2">
             <button
@@ -123,47 +176,34 @@ const Warehouse = () => {
           </div>
         );
       },
-      meta: { width: '150px' },
     },
   ];
-  const data = [
-    { name: 'Alice', age: 30, city: 'New York' },
-    { name: 'Bob', age: 25, city: 'Los Angeles' },
-    { name: 'Charlie', age: 35, city: 'Chicago' },
-  ];
-
-  const handleChange = (e) => {
-    const data = { ...payload };
-    const { name, value } = e.target;
-    data[name] = value;
-    setFormPayload(data);
-  };
-
-  /*
-Todo:
-1. Create  a form
-2. Create a table component  ot show data
-3. Create a slice for warehouse
-*/
+  // console.log(columns);
+  console.log(warehouses);
   return (
     <div>
-      {
-        !isForm &&
-      <button onClick={() => setIsForm(true)}>Create </button>
-      }
+      {!isForm ? (
+        <button
+          className="mb-4 px-4 py-2 bg-blue-500 text-white"
+          onClick={() => setIsForm(true)}
+        >
+          Create Warehouse
+        </button>
+      ) : null}
 
       {isForm ? (
         <RenderWarehouseForm
           schema={formSchema}
           payload={formPayload}
-          onCancel={() => setIsForm(false)}
-          onSubmit={()=>{console.log("Submit")}}
+          onCancel={() => {
+            setIsForm(false);
+            setFormPayload({ ...defaultPayload });
+          }}
+          onSubmit={handleSubmit}
           handleChange={handleChange}
         />
       ) : (
-          <div>
-            <TableComponent columns={columns} data={data}/>
-        </div>
+        <TableComponent columns={columns} data={warehouses} />
       )}
     </div>
   );
