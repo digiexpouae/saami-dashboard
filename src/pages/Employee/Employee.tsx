@@ -2,8 +2,17 @@ import React, { useState } from 'react';
 import RenderEmployeeForm from '../../common/RenderForm/RenderForm';
 import TableComponent from '../../common/DataGrid/DataGrid';
 import { useSelector } from 'react-redux';
-import { fetchWarehouses } from '../../sliceApi/warehouseSlice'; 
-const formSchema = [
+
+interface FormSchemaField {
+  name: string;
+  label: string;
+  type: string;
+  required: boolean;
+  placeholder: string;
+  options?: { label: string; value: string }[]; // Optional, used for select fields
+}
+
+const formSchema:FormSchemaField[]= [
   {
     name: 'employeeName',
     label: 'Username',
@@ -38,9 +47,9 @@ const formSchema = [
     type: 'select',
     required: true,
     placeholder: 'Select Warehouse',
-    options: ['http://localhost:5000/api/warehouses/676dabe6bcac3c55b73c2b45'
-  // warehouses drop down
-    ],
+    options: [
+// drop down for warehouses
+],
   },
   
 ];
@@ -54,7 +63,8 @@ const Employee = () => {
   const [isForm, setIsForm] = useState(false);
   const [formPayload, setFormPayload] = useState({ ...payload });
 const data=useSelector<any>((state)=>state.employee.data)
-  const handleChange = (e:any) => {
+
+const handleChange = (e:any) => {
     const data = { ...payload };
     const { name, value } = e.target;
     data[name] = value;
@@ -64,35 +74,35 @@ const data=useSelector<any>((state)=>state.employee.data)
     {
       header: 'Employee Name',
       accessorKey: 'username',
-      cell: (info) => info.getValue(),
+      cell: (info:any) => info.getValue(),
     },
 
     {
       header: 'Email',
       accessorKey: 'email',
-      cell: (info) => info.getValue(),
+      cell: (info:any) => info.getValue(),
     },
 
     {
       header: 'Password',
       accessorKey: 'password',
-      cell: (info) => info.getValue(),
+      cell: (info:any) => info.getValue(),
     },
 
    
     {
       header: 'Role',
       accessorKey: 'role',
-      cell: (info) => info.getValue(),
+      cell: (info:any) => info.getValue(),
     },
     {
       header: 'Total Employees',
       accessorKey: 'totalEmployees',
-      cell: (info) => info.getValue(),
+      cell: (info:any) => info.getValue(),
     },
     {
       header: 'Actions',
-      cell: (info) => {
+      cell: (info:any) => {
         const rowData = info.row.original;
         return (
           <div className="flex gap-2">

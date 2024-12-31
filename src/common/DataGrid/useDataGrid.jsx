@@ -22,7 +22,7 @@ const useDataGrid = (columns, data) => {
               <th
                 key={head.id}
                 colSpan={head.colSpan}
-                className="min-w-[220px] py-4 px-4 font-medium text-black dark:text-white xl:pl-11"
+                className="min-w-[200px] font-medium text-black dark:text-white "
               >
                 {flexRender(head.column.columnDef.header, head.getContext())}
               </th>

@@ -91,7 +91,7 @@ const Warehouse = () => {
         .then(() => {
           dispatch(fetchWarehouses());
         })
-        .catch((error) => {
+        .catch((error:any) => {
           console.error('Update error:', error);
         });
     } else {
@@ -99,7 +99,7 @@ const Warehouse = () => {
         .then(() => {
           dispatch(fetchWarehouses());
         })
-        .catch((error) => {
+        .catch((error:any) => {
           console.error('Creation error:', error);
         });
     }
@@ -110,7 +110,7 @@ const Warehouse = () => {
 
   // console.log(token);
 
-  const handleEdit = (row) => {
+  const handleEdit = (row:any) => {
     console.log(row);
 
     setIsForm(true);
@@ -126,12 +126,12 @@ const Warehouse = () => {
     console.log(formPayload);
   };
 
-  const handleDelete = (row) => {
+  const handleDelete = (row:any) => {
     dispatch(deleteWarehouse({ id: row._id, token }))
       .then(() => {
         dispatch(fetchWarehouses()); // Refresh the list after deletion
       })
-      .catch((error) => {
+      .catch((error:any) => {
         console.error('Delete error:', error);
       });
   };
@@ -140,11 +140,11 @@ const Warehouse = () => {
     {
       header: 'Warehouse Name',
       accessorKey: 'name',
-      cell: (info) => info.getValue(),
+      cell: (info:any) => info.getValue(),
     },
     {
       header: 'Location',
-      cell: (info) => {
+      cell: (info:any) => {
         const location = info.row.original.location || {};
         const { latitude = 'N/A', longitude = 'N/A' } = location;
         return `${latitude}, ${longitude}`;
@@ -153,11 +153,11 @@ const Warehouse = () => {
     {
       header: 'Total Employees',
       accessorKey: 'totalEmployees',
-      cell: (info) => info.getValue(),
+      cell: (info:any) => info.getValue(),
     },
     {
       header: 'Actions',
-      cell: (info) => {
+      cell: (info:any) => {
         const rowData = info.row.original;
         return (
           <div className="flex gap-2">
