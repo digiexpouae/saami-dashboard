@@ -179,7 +179,7 @@ const Warehouse = () => {
     },
   ];
   // console.log(columns);
-  console.log(warehouses);
+  // console.log(warehouses);
   return (
     <div>
       {!isForm ? (
