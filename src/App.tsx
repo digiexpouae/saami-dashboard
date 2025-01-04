@@ -12,13 +12,13 @@ import Settings from './pages/Settings';
 import Tables from './pages/Tables';
 import Alerts from './pages/UiElements/Alerts';
 import Buttons from './pages/UiElements/Buttons';
+import Checkin from './pages/Checkin/Checkin.js';
 import DefaultLayout from './layout/DefaultLayout';
 import Warehouse from './pages/Warehouse/Warehouse';
 import Employee from '@pages/Employee/Employee';
 import { useDispatch } from 'react-redux';
 import { createWarehouse } from './sliceApi/warehouseApi.js';
 import { AppDispatch } from '@redux/store.js';
-
 function App() {
   const dispatch = useDispatch<AppDispatch>();
   const [loading, setLoading] = useState<boolean>(true);
@@ -115,6 +115,8 @@ function App() {
                   </>
                 }
               />
+
+
               <Route
                 path="/settings"
                 element={
@@ -151,6 +153,16 @@ function App() {
                   </>
                 }
               />
+                <Route
+                path="/checkin"
+                element={
+                  <>
+                    <PageTitle title="Checkin | TailAdmin - Tailwind CSS Admin Dashboard Template" />
+                    <Checkin />
+                  </>
+                }
+              />
+         
             </Routes>
           </DefaultLayout>
         }
