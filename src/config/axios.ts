@@ -1,10 +1,10 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'http://localhost:5000/api',
+  baseURL: 'http://testapi.145.223.21.85.sslip.io/api',
 });
 
-const GET_ALL_WAREHOUSE = '/warehouses'; 
+const GET_ALL_WAREHOUSE = '/warehouses';
 const CREATE_WAREHOUSE = '/warehouses';
 const UPDATE_WAREHOUSE = '/warehouses';
 const DELETE_WAREHOUSE = '/warehouses';
