@@ -119,7 +119,7 @@ const Warehouse = () => {
       name: row.name,
       latitude: row.location.latitude,
       longitude: row.location.longitude,
-      totalEmployees: row.totalEmployees,
+   
     });
     console.log(row._id);
 

@@ -20,8 +20,7 @@ import { useDispatch } from 'react-redux';
 import { createWarehouse } from './sliceApi/warehouseApi.js';
 import { AppDispatch } from '@redux/store.js';
 function App() {
-  const dispatch = useDispatch<AppDispatch>();
-  const [loading, setLoading] = useState<boolean>(true);
+
   const { pathname } = useLocation();
   const token = localStorage.getItem('token');
 
@@ -29,23 +28,7 @@ function App() {
     window.scrollTo(0, 0);
   }, [pathname]);
 
-  useEffect(() => {
-    const createNewWarehouse = async () => {
-      try {
-        const body = { name: 'mansab' };
-        await dispatch(createWarehouse(body));
-      } catch (error) {
-        console.error('Error creating warehouse:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    createNewWarehouse();
-  }, []);
 
-  if (loading) {
-    return <Loader />;
-  }
 
   return (
     <Routes>
@@ -162,7 +145,7 @@ function App() {
                   </>
                 }
               />
-         
+
             </Routes>
           </DefaultLayout>
         }
