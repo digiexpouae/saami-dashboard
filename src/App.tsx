@@ -23,7 +23,7 @@ function App() {
   const dispatch = useDispatch<AppDispatch>();
   const [loading, setLoading] = useState<boolean>(true);
   const { pathname } = useLocation();
-  const token = localStorage.getItem('token');
+  const token = localStorage.getItem('authToken');
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -45,6 +45,15 @@ function App() {
 
   if (loading) {
     return <Loader />;
+  }
+
+  if (!token) {
+    return (
+      <Routes>
+        <Route path="/login" element={<SignIn />} />
+        <Route path="*" element={<Navigate to="/login" />} />
+      </Routes>
+    );
   }
 
   return (

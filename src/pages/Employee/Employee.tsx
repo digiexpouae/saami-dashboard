@@ -3,7 +3,7 @@ import RenderEmployeeForm from '../../common/RenderForm/RenderForm';
 import TableComponent from '../../common/DataGrid/DataGrid';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchWarehouses } from '../../sliceApi/warehouseSlice';
-import { createEmployee, getEmployees, updateEmployee, deleteEmployee } from '../../slice/employee'; // Import slice actions
+import { createEmployee, getEmployees, updateEmployee, deleteEmployee } from '../../slice/employee'; 
 import { RootState } from '../redux/store';
 
 const baseSchema = [

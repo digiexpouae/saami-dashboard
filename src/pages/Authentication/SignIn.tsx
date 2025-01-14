@@ -39,13 +39,14 @@ const SignIn: React.FC = () => {
           <div className="hidden w-full xl:block xl:w-1/2">
             <div className="py-17.5 px-26 text-center">
               <Link className="mb-5.5 inline-block" to="/">
-                <img className="hidden dark:block" src={Logo} alt="Logo" />
-                <img className="dark:hidden" src={LogoDark} alt="Logo" />
+                {/* <img className="hidden dark:block" src={Logo} alt="Logo" />
+                <img className="dark:hidden" src={LogoDark} alt="Logo" /> */}
+                <h1 className='text-2xl font-bold text-black dark:text-white sm:text-title-xl2'>Saami Treders</h1>
               </Link>
 
               <p className="2xl:px-20">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit
-                suspendisse.
+                {/* Lorem ipsum dolor sit amet, consectetur adipiscing elit
+                suspendisse. */}
               </p>
 
               <span className="mt-15 inline-block">
@@ -175,9 +176,9 @@ const SignIn: React.FC = () => {
 
           <div className="w-full border-stroke dark:border-strokedark xl:w-1/2 xl:border-l-2">
             <div className="w-full p-4 sm:p-12.5 xl:p-17.5">
-              <span className="mb-1.5 block font-medium">Start for free</span>
+              {/* <span className="mb-1.5 block font-medium">Start for free</span> */}
               <h2 className="mb-9 text-2xl font-bold text-black dark:text-white sm:text-title-xl2">
-                Sign In to TailAdmin
+                Log in
               </h2>
 
               <form>
@@ -257,7 +258,7 @@ const SignIn: React.FC = () => {
                     onClick={handleLogin}
                     className="w-full cursor-pointer rounded-lg border border-primary bg-primary p-4 text-white transition hover:bg-opacity-90 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-opacity-50"
                   >
-                    Sign In
+                    Log In
                   </button>
                 </div>
 
@@ -300,7 +301,7 @@ const SignIn: React.FC = () => {
 
                 <div className="mt-6 text-center">
                   <p>
-                    Don’t have any account?{' '}
+                   
                     <Link to="/auth/signup" className="text-primary">
                       {/* Sign Up */}
                     </Link>
