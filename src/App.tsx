@@ -1,5 +1,6 @@
-import { useEffect, useState } from 'react';
-import { Route, Routes, useLocation, Navigate } from 'react-router-dom';
+import { useEffect } from 'react';
+import { Route, Routes, Navigate, useLocation } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import Loader from './common/Loader';
 import PageTitle from './components/PageTitle';
 import SignIn from './pages/Authentication/SignIn';
@@ -16,149 +17,86 @@ import Checkin from './pages/Checkin/Checkin.js';
 import DefaultLayout from './layout/DefaultLayout';
 import Warehouse from './pages/Warehouse/Warehouse';
 import Employee from '@pages/Employee/Employee';
-import { useDispatch, useSelector } from 'react-redux';
+
+function ProtectedRoute({ children }) {
+  const token = useSelector((state) => state.auth.token);
+
+  // If token doesn't exist, redirect to login page
+  if (!token) {
+    return <Navigate to="/login" replace />;
+  }
+
+  // Otherwise, render the children (protected routes)
+  return children;
+}
 
 function App() {
-
   const { pathname } = useLocation();
-  const token = useSelector((state) => state.auth.token);
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [pathname]);
 
-
-  console.log(token);
-  
-
   return (
-
     <Routes>
-      {/* Public Routes - No DefaultLayout */}
+      {/* Public Routes - Accessible without authentication */}
+      <Route path="/login" element={<SignIn />} />
+      <Route path="/signup" element={<SignUp />} />
 
-      {
-        token ? (
-      <>
-      
-  
-    
-
-      {/* Protected Routes - Wrapped with DefaultLayout */}
+      {/* Protected Routes - Requires authentication */}
       <Route
         path="*"
         element={
-          <DefaultLayout>
-            <Routes>
-              <Route
-                path="/warehouse"
-                element={
-                  <>
-                    <PageTitle title="Warehouse | TailAdmin - Tailwind CSS Admin Dashboard Template" />
-                    <Warehouse />
-                  </>
-                }
-              />
-              <Route
-                path="/employee"
-                element={
-                  <>
-                    <PageTitle title="Employee | TailAdmin - Tailwind CSS Admin Dashboard Template" />
-                    <Employee />
-                  </>
-                }
-              />
-              <Route
-                index
-                element={
-                  <>
-                    <PageTitle title="ECommerce Dashboard | TailAdmin - Tailwind CSS Admin Dashboard Template" />
-                    <ECommerce />
-                  </>
-                }
-              />
-              <Route
-                path="/forms/form-elements"
-                element={
-                  <>
-                    <PageTitle title="Form Elements | TailAdmin - Tailwind CSS Admin Dashboard Template" />
-                    <FormElements />
-                  </>
-                }
-              />
-              <Route
-                path="/forms/form-layout"
-                element={
-                  <>
-                    <PageTitle title="Form Layout | TailAdmin - Tailwind CSS Admin Dashboard Template" />
-                    <FormLayout />
-                  </>
-                }
-              />
-              <Route
-                path="/tables"
-                element={
-                  <>
-                    <PageTitle title="Tables | TailAdmin - Tailwind CSS Admin Dashboard Template" />
-                    <Tables />
-                  </>
-                }
-              />
-
-
-              <Route
-                path="/settings"
-                element={
-                  <>
-                    <PageTitle title="Settings | TailAdmin - Tailwind CSS Admin Dashboard Template" />
-                    <Settings />
-                  </>
-                }
-              />
-              <Route
-                path="/chart"
-                element={
-                  <>
-                    <PageTitle title="Basic Chart | TailAdmin - Tailwind CSS Admin Dashboard Template" />
-                    <Chart />
-                  </>
-                }
-              />
-              <Route
-                path="/ui/alerts"
-                element={
-                  <>
-                    <PageTitle title="Alerts | TailAdmin - Tailwind CSS Admin Dashboard Template" />
-                    <Alerts />
-                  </>
-                }
-              />
-              <Route
-                path="/ui/buttons"
-                element={
-                  <>
-                    <PageTitle title="Buttons | TailAdmin - Tailwind CSS Admin Dashboard Template" />
-                    <Buttons />
-                  </>
-                }
-              />
+          <ProtectedRoute>
+            <DefaultLayout>
+              <Routes>
                 <Route
-                path="/attendances"
-                element={
-                  <>
-                    <PageTitle title="Checkin | TailAdmin - Tailwind CSS Admin Dashboard Template" />
-                    <Checkin />
-                  </>
-                }
-              />
+                  path="/warehouse"
+                  element={
+                    <>
+                      <PageTitle title="Warehouse | TailAdmin - Tailwind CSS Admin Dashboard Template" />
+                      <Warehouse />
+                    </>
+                  }
+                />
+                <Route
+                  path="/employee"
+                  element={
+                    <>
+                      <PageTitle title="Employee | TailAdmin - Tailwind CSS Admin Dashboard Template" />
+                      <Employee />
+                    </>
+                  }
+                />
+                <Route
+                  index
+                  element={
+                    <>
+                      <PageTitle title="ECommerce Dashboard | TailAdmin - Tailwind CSS Admin Dashboard Template" />
+                      <ECommerce />
+                    </>
+                  }
+                />
+      
 
-            </Routes>
-          </DefaultLayout>
+
+
+
+
+                <Route
+                  path="/attendances"
+                  element={
+                    <>
+                      <PageTitle title="Checkin | TailAdmin - Tailwind CSS Admin Dashboard Template" />
+                      <Checkin />
+                    </>
+                  }
+                />
+              </Routes>
+            </DefaultLayout>
+          </ProtectedRoute>
         }
       />
-          </>
-        ):  <Route path="/login" element={<SignIn />} />
-      }
-
     </Routes>
   );
 }
