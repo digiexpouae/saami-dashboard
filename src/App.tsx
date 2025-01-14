@@ -146,7 +146,7 @@ function App() {
                 }
               />
                 <Route
-                path="/checkin"
+                path="/attendances"
                 element={
                   <>
                     <PageTitle title="Checkin | TailAdmin - Tailwind CSS Admin Dashboard Template" />
