@@ -40,12 +40,7 @@ export const createWarehouse = createAsyncThunk(
   'warehouse/createWarehouse',
   async ({ payload, token }: { payload: any; token: string }, thunkAPI) => {
     try {
-      const response = await api.post(CREATE_WAREHOUSE, payload, {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await api.post(CREATE_WAREHOUSE, payload);
       return response.data;
     } catch (error: any) {
       return thunkAPI.rejectWithValue(
@@ -66,12 +61,7 @@ export const updateWarehouse = createAsyncThunk(
       const response = await api.put(
         `${UPDATE_WAREHOUSE}/${updatedWarehouse.id}`,
         updatedWarehouse,
-        {
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
-          },
-        },
+
       );
       return response.data;
     } catch (error: any) {
