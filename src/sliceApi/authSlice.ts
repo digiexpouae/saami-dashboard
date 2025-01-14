@@ -3,13 +3,15 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
 interface AuthState {
+  user: any;
   token: string | null;
   loading: boolean;
   error: string | null;
 }
 
 const initialState: AuthState = {
-  token: null,
+  user: localStorage.getItem('user'),
+  token: localStorage.getItem('token'),
   loading: false,
   error: null,
 };
@@ -28,8 +30,14 @@ export const login = createAsyncThunk(
         email,
         password,
       });
+      console.log(response.data.data.user);
 
-      return response.data.data.token; // Assuming the API returns a token
+      localStorage.setItem('user', JSON.stringify(response.data.data.user));
+      localStorage.setItem('token', response.data.data.token);
+      return {
+        user: response.data.data.user,
+        token: response.data.data.token,
+      } // Assuming the API returns a token
     } catch (error: any) {
       return thunkAPI.rejectWithValue(
         error.response.data.message || 'Login failed',
@@ -44,7 +52,9 @@ const authSlice = createSlice({
   reducers: {
     logout: (state) => {
       state.token = null;
-      localStorage.removeItem('authToken');
+      state.user = null;
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
     },
   },
   extraReducers: (builder) => {
@@ -55,8 +65,8 @@ const authSlice = createSlice({
       })
       .addCase(login.fulfilled, (state, action) => {
         state.loading = false;
-        state.token = action.payload;
-        localStorage.setItem('authToken', action.payload);
+        state.token = action.payload.token;
+        state.user = action.payload.user;
       })
       .addCase(login.rejected, (state, action) => {
         state.loading = false;

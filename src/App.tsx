@@ -16,27 +16,32 @@ import Checkin from './pages/Checkin/Checkin.js';
 import DefaultLayout from './layout/DefaultLayout';
 import Warehouse from './pages/Warehouse/Warehouse';
 import Employee from '@pages/Employee/Employee';
-import { useDispatch } from 'react-redux';
-import { createWarehouse } from './sliceApi/warehouseApi.js';
-import { AppDispatch } from '@redux/store.js';
+import { useDispatch, useSelector } from 'react-redux';
+
 function App() {
 
   const { pathname } = useLocation();
-  const token = localStorage.getItem('token');
+  const token = useSelector((state) => state.auth.token);
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [pathname]);
 
 
+  console.log(token);
+  
 
   return (
+
     <Routes>
       {/* Public Routes - No DefaultLayout */}
-      <Route
-        path="/login"
-        element={token ? <Navigate to="/" replace /> : <SignIn />}
-      />
+
+      {
+        token ? (
+      <>
+      
+  
+    
 
       {/* Protected Routes - Wrapped with DefaultLayout */}
       <Route
@@ -137,7 +142,7 @@ function App() {
                 }
               />
                 <Route
-                path="/checkin"
+                path="/attendances"
                 element={
                   <>
                     <PageTitle title="Checkin | TailAdmin - Tailwind CSS Admin Dashboard Template" />
@@ -150,6 +155,10 @@ function App() {
           </DefaultLayout>
         }
       />
+          </>
+        ):  <Route path="/login" element={<SignIn />} />
+      }
+
     </Routes>
   );
 }

@@ -31,6 +31,8 @@ export const getEmployees = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const response = await api.get(GET_ALL_EMPLOYEE);
+      console.log(response.data.data);
+      
       return response.data.data;
     } catch (error) {
       return rejectWithValue(error.response?.data || error.message);
