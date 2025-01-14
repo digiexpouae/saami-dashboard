@@ -10,8 +10,8 @@ interface AuthState {
 }
 
 const initialState: AuthState = {
-  user: null,
-  token: null,
+  user: localStorage.getItem('user'),
+  token: localStorage.getItem('token'),
   loading: false,
   error: null,
 };
@@ -30,8 +30,14 @@ export const login = createAsyncThunk(
         email,
         password,
       });
+      console.log(response.data.data.user);
 
-      return response.data.data.token; // Assuming the API returns a token
+      localStorage.setItem('user', JSON.stringify(response.data.data.user));
+      localStorage.setItem('token', response.data.data.token);
+      return {
+        user: response.data.data.user,
+        token: response.data.data.token,
+      } // Assuming the API returns a token
     } catch (error: any) {
       return thunkAPI.rejectWithValue(
         error.response.data.message || 'Login failed',
@@ -47,8 +53,8 @@ const authSlice = createSlice({
     logout: (state) => {
       state.token = null;
       state.user = null;
-      localStorage.removeItem('authToken');
-      localStorage.removeItem('authUser');
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
     },
   },
   extraReducers: (builder) => {
@@ -61,10 +67,6 @@ const authSlice = createSlice({
         state.loading = false;
         state.token = action.payload.token;
         state.user = action.payload.user;
-
-        // Save both token and user to localStorage
-        localStorage.setItem('authToken', action.payload.token);
-        localStorage.setItem('authUser', JSON.stringify(action.payload.user));
       })
       .addCase(login.rejected, (state, action) => {
         state.loading = false;

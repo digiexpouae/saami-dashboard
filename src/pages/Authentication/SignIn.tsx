@@ -17,14 +17,6 @@ const SignIn: React.FC = () => {
     (state: RootState) => state.auth,
   );
 
-  useEffect(() => {
-    if (token) {
-      localStorage.setItem('token', token);
-      // const user = useSelector((state: RootState) => state.auth.user);
-      // localStorage.setItem('user', JSON.stringify(user));
-      navigate('/');
-    }
-  }, [token, navigate]);
 
   const handleLogin = () => {
     dispatch(login({ email, password }));
@@ -41,7 +33,7 @@ const SignIn: React.FC = () => {
               <Link className="mb-5.5 inline-block" to="/">
                 {/* <img className="hidden dark:block" src={Logo} alt="Logo" />
                 <img className="dark:hidden" src={LogoDark} alt="Logo" /> */}
-                <h1 className='text-2xl font-bold text-black dark:text-white sm:text-title-xl2'>Saami Treders</h1>
+                <h1 className='text-2xl font-bold text-black dark:text-white sm:text-title-xl2'>Saami Traders</h1>
               </Link>
 
               <p className="2xl:px-20">

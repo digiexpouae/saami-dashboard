@@ -1,11 +1,11 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'http://localhost:5000/api',
+  baseURL: 'https://saamiapi.saamitraders.com/api',
 });
 
 api.interceptors.request.use((config) => {
-  const token = localStorage.getItem('authToken');
+  const token = localStorage.getItem('token');
   if (token) {
     config.headers.authtoken = `${token}`;
   }
@@ -15,14 +15,14 @@ api.interceptors.request.use((config) => {
 api.interceptors.response.use(
   (response) => {
     if (response.status === 401) {
-      localStorage.removeItem('authToken');
+      localStorage.removeItem('token');
       window.location.href = '/login';
     }
     return response;
   },
   (error) => {
     if (error.response && error.response.status === 401) {
-      localStorage.removeItem('authToken');
+      localStorage.removeItem('token');
       window.location.href = '/login';
     }
     return Promise.reject(error);
