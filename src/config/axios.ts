@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'https://saamiapi.saamitraders.com/api',
+  baseURL: 'https://saamiapi.saamitradestar.com/api',
 });
 
 api.interceptors.request.use((config) => {

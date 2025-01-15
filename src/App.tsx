@@ -32,6 +32,8 @@ function ProtectedRoute({ children }) {
 
 function App() {
   const { pathname } = useLocation();
+  const token = useSelector((state) => state.auth.token);
+
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -77,7 +79,7 @@ function App() {
                     </>
                   }
                 />
-      
+
 
 
 

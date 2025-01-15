@@ -1,12 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import Breadcrumb from '../../components/Breadcrumbs/Breadcrumb';
-import LogoDark from '../../images/logo/logo-dark.svg';
-import Logo from '../../images/logo/logo.svg';
+import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { login } from '../../sliceApi/authSlice';
+import { Link, useNavigate } from 'react-router-dom';
+import Breadcrumb from '../../components/Breadcrumbs/Breadcrumb';
 import { RootState } from '../../redux/store';
-import { useNavigate } from 'react-router-dom';
+import { login } from '../../sliceApi/authSlice';
 
 const SignIn: React.FC = () => {
   const [email, setEmail] = useState('');
@@ -19,7 +16,9 @@ const SignIn: React.FC = () => {
 
 
   const handleLogin = () => {
-    dispatch(login({ email, password }));
+    dispatch(login({ email, password })).unwrap().then(() => {
+      navigate('/');
+    });
   };
 
   return (
@@ -293,7 +292,7 @@ const SignIn: React.FC = () => {
 
                 <div className="mt-6 text-center">
                   <p>
-                   
+
                     <Link to="/auth/signup" className="text-primary">
                       {/* Sign Up */}
                     </Link>
