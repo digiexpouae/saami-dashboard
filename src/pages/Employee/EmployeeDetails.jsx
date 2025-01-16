@@ -57,7 +57,7 @@ export default function EmployeeDetails() {
       ]
     : [];
 
- const COLORS = ["#1E90FF", "#FFA500"];
+ const COLORS = ["#0088FE", "#00C49F"];
 
   const exportToExcel = () => {
     const ws = XLSX.utils.json_to_sheet(
