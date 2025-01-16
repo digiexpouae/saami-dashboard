@@ -17,6 +17,7 @@ import Checkin from './pages/Checkin/Checkin.js';
 import DefaultLayout from './layout/DefaultLayout';
 import Warehouse from './pages/Warehouse/Warehouse';
 import Employee from '@pages/Employee/Employee';
+import EmployeeDetails from '@pages/Employee/EmployeeDetails.jsx';
 
 function ProtectedRoute({ children }) {
   const token = useSelector((state) => state.auth.token);
@@ -67,6 +68,15 @@ function App() {
                     <>
                       <PageTitle title="Employee | TailAdmin - Tailwind CSS Admin Dashboard Template" />
                       <Employee />
+                    </>
+                  }
+                />
+                <Route
+                  path="/employee/:employeeId"
+                  element={
+                    <>
+                      <PageTitle title="Employee Details | TailAdmin - Tailwind CSS Admin Dashboard Template" />
+                      <EmployeeDetails />
                     </>
                   }
                 />

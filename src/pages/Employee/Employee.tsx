@@ -193,7 +193,7 @@ const handleDelete = (employee) => {
           onSubmit={handleSubmit}
         />
       ) : (
-        <TableComponent columns={columns} data={employees} />
+        <TableComponent columns={columns} data={employees} isEmployeeData={true}/>
       )}
     </div>
   );

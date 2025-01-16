@@ -3,6 +3,8 @@ import employeeReducer from '../slice/employee'
 import authReducer from '../sliceApi/authSlice'
 import warehouseReducer from '../sliceApi/warehouseSlice'
 import attendanceReducer from '../sliceApi/attendanceSlice';
+import attendanceSummaryReducer from '../sliceApi/attendanceSummarySlice';
+
 
 
 const store = configureStore({
@@ -11,6 +13,7 @@ const store = configureStore({
     auth: authReducer,
     warehouse: warehouseReducer,
     attendance: attendanceReducer,
+    attendanceSummary: attendanceSummaryReducer,
   },
 });
 
