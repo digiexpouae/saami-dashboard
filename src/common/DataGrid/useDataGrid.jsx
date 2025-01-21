@@ -4,12 +4,14 @@ import {
   useReactTable,
   flexRender,
 } from '@tanstack/react-table';
-const useDataGrid = (columns, data) => {
+
+const useDataGrid = (columns, data, isEmployeeData, handleRowClick) => {
   const table = useReactTable({
     columns: useMemo(() => columns, [columns]),
     data: useMemo(() => data, [data]),
     getCoreRowModel: getCoreRowModel(),
   });
+
   const renderColumns = () => {
     return (
       <thead>
@@ -32,11 +34,24 @@ const useDataGrid = (columns, data) => {
       </thead>
     );
   };
+
   const renderBody = () => {
     return (
       <tbody>
         {table.getRowModel().rows.map((row) => (
-          <tr key={row.id}>
+          <tr
+            key={row.id}
+            onClick={() => {
+              if (isEmployeeData) {
+                console.log(row.original);
+                
+                const employeeName = row.original.username;
+                const employeeId = row.original._id; 
+                handleRowClick(employeeId, employeeName);
+              }
+            }}
+            className="cursor-pointer hover:bg-gray-100"
+          >
             {row.getVisibleCells().map((cell) => (
               <td
                 key={cell.id}
@@ -54,7 +69,6 @@ const useDataGrid = (columns, data) => {
   return {
     renderBody,
     renderColumns,
-
   };
 };
 

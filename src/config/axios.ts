@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'https://saamiapi.saamitradestar.com/api',
+  baseURL: 'http://localhost:5000/api',
 });
 
 api.interceptors.request.use((config) => {
@@ -39,5 +39,6 @@ const UPDATE_EMPLOYEE = '/users'; // Example endpoint for updating an employee
 const DELETE_EMPLOYEE = '/users'; // Example endpoint for deleting an employee
 
 const GET_ALL_ATTANDANCE = '/attendance/get-summary';
+const GET_EMPLOYEE_SUMMARY = "/notify/activity-summary";
 
-export { api, CREATE_EMPLOYEE, GET_ALL_EMPLOYEE, UPDATE_EMPLOYEE, DELETE_EMPLOYEE, GET_ALL_WAREHOUSE, CREATE_WAREHOUSE, UPDATE_WAREHOUSE, DELETE_WAREHOUSE, GET_ALL_ATTANDANCE };
+export { api, CREATE_EMPLOYEE, GET_ALL_EMPLOYEE, UPDATE_EMPLOYEE, DELETE_EMPLOYEE, GET_ALL_WAREHOUSE, CREATE_WAREHOUSE, UPDATE_WAREHOUSE, DELETE_WAREHOUSE, GET_ALL_ATTANDANCE, GET_EMPLOYEE_SUMMARY };
