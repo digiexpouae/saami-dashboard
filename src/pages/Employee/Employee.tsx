@@ -3,8 +3,9 @@ import RenderEmployeeForm from '../../common/RenderForm/RenderForm';
 import TableComponent from '../../common/DataGrid/DataGrid';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchWarehouses } from '../../sliceApi/warehouseSlice';
-import { createEmployee, getEmployees, updateEmployee, deleteEmployee } from '../../slice/employee'; 
+import { createEmployee, getEmployees, updateEmployee, deleteEmployee } from '../../slice/employee';
 import { RootState } from '../redux/store';
+import { useNavigate } from 'react-router-dom';
 
 const baseSchema = [
   {
@@ -33,7 +34,7 @@ const baseSchema = [
     required: true,
     options: [
       { value: 'employee', label: 'Employee' },
-      { value: 'warehouse_manager', label: 'Warehouse Manager' }, 
+      { value: 'warehouse_manager', label: 'Warehouse Manager' },
     ],
   },
   {
@@ -137,6 +138,13 @@ const formSchema = warehouses.length
       assignedWarehouse: row.assignedWarehouse?._id || '',
     });
   };
+const navigate = useNavigate()
+  const handleView = (employeInfo) => {
+    const { _id , username} = employeInfo;
+    console.log(employeInfo)
+    navigate(`/employee/${_id}?name=${username}`);
+
+  }
 
 const handleDelete = (employee) => {
   const confirmDelete = window.confirm(`Are you sure you want to delete ${employee.username}?`);
@@ -166,6 +174,9 @@ const handleDelete = (employee) => {
         const rowData = info.row.original;
         return (
           <div className="flex gap-2">
+            <button className="text-blue-500" onClick={() => handleView(rowData)}>
+              View
+            </button>
             <button className="text-blue-500" onClick={() => handleEdit(rowData)}>
               Edit
             </button>
@@ -193,7 +204,7 @@ const handleDelete = (employee) => {
           onSubmit={handleSubmit}
         />
       ) : (
-        <TableComponent columns={columns} data={employees} isEmployeeData={true}/>
+        <TableComponent columns={columns} data={employees} isEmployeeData={false}/>
       )}
     </div>
   );

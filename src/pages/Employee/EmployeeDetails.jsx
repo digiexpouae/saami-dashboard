@@ -12,7 +12,7 @@ export default function EmployeeDetails() {
   const { employeeId } = useParams();
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
-  const employeeName = queryParams.get('name');  
+  const employeeName = queryParams.get('name');
 
   const [fromDate, setFromDate] = useState(null);
   const [toDate, setToDate] = useState(null);
@@ -52,8 +52,8 @@ export default function EmployeeDetails() {
 
   const pieChartData = employeeData
     ? [
-         { name: "Inside Time", value: parseFloat((employeeData.totalInsideTime || 0).toFixed(2)) },
-          { name: "Outside Time", value: parseFloat((employeeData.totalOutsideTime || 0).toFixed(2)) },
+         { name: "Inside Time", value: parseFloat((employeeData?.totalInsideTime || 0).toFixed(2)) },
+          { name: "Outside Time", value: parseFloat((employeeData?.totalOutsideTime || 0).toFixed(2)) },
       ]
     : [];
 
@@ -61,7 +61,7 @@ export default function EmployeeDetails() {
 
   const exportToExcel = () => {
     const ws = XLSX.utils.json_to_sheet(
-      employeeData.dailyData.map((day) => ({
+      employeeData?.dailyData?.map((day) => ({
         EmployeeName: employeeName,  // Add employee name to each record
         Date: day.date,
          "Inside Time": (Number(day.insideTime) || 0).toFixed(2),  // Format to 2 decimals
@@ -73,7 +73,7 @@ export default function EmployeeDetails() {
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, "Daily Data");
 
-   
+
     XLSX.writeFile(wb, `${employeeName}_daily_data_${format(new Date(), "yyyy-MM-dd")}.xlsx`);
   };
 
@@ -105,9 +105,9 @@ export default function EmployeeDetails() {
       </div>
 
       {employeeData && (
-        
+
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          
+
           <div className="p-4 border rounded-md shadow-md">
             <h3 className="text-lg font-bold mb-4">Time Distribution</h3>
             <ResponsiveContainer width="100%" height={300}>
@@ -129,14 +129,14 @@ export default function EmployeeDetails() {
               </PieChart>
             </ResponsiveContainer>
             <div className="mt-4">
-              <p>Total Inside Time: {(Number(employeeData.totalInsideTime) || 0).toFixed(2)} hours</p>
-              <p>Total Outside Time: {(Number(employeeData.totalOutsideTime) || 0).toFixed(2)} hours</p>
-              <p>Total Working Hours: {(Number(employeeData.totalWorkingHours) || 0).toFixed(2)} hours</p>
+              <p>Total Inside Time: {(Number(employeeData?.totalInsideTime) || 0).toFixed(2)} hours</p>
+              <p>Total Outside Time: {(Number(employeeData?.totalOutsideTime) || 0).toFixed(2)} hours</p>
+              <p>Total Working Hours: {(Number(employeeData?.totalWorkingHours) || 0).toFixed(2)} hours</p>
             </div>
           </div>
 
           <div className="p-4 border rounded-md shadow-md">
-           
+
 
             <h3 className="text-lg font-bold mb-4">Daily Data</h3>
             <table className="w-full text-left border-collapse">
@@ -148,16 +148,23 @@ export default function EmployeeDetails() {
                   <th className="border p-2">Working Hours</th>
                 </tr>
               </thead>
-              <tbody>
-                {employeeData.dailyData.map((day) => (
-                  <tr key={day._id} className="hover:bg-gray-100">
-                    <td className="border p-2">{day.date}</td>
-                     <td className="border p-2">{(Number(day.insideTime) || 0).toFixed(2)}</td>  {/* Safely format */}
-                    <td className="border p-2">{(Number(day.outsideTime) || 0).toFixed(2)}</td>  {/* Safely format */}
-                    <td className="border p-2">{(Number(day.workingHours) || 0).toFixed(2)}</td>  {/* Safely format */}
-                  </tr>
-                ))}
+                {
+                  employeeData?.dailyData?.length < 1 ? (
+                    <tbody>
+{employeeData?.dailyData?.length &&  employeeData?.dailyData?.map((day) => (
+  <tr key={day._id} className="hover:bg-gray-100">
+    <td className="border p-2">{day.date}</td>
+     <td className="border p-2">{(Number(day.insideTime) || 0).toFixed(2)}</td>  {/* Safely format */}
+    <td className="border p-2">{(Number(day.outsideTime) || 0).toFixed(2)}</td>  {/* Safely format */}
+    <td className="border p-2">{(Number(day.workingHours) || 0).toFixed(2)}</td>  {/* Safely format */}
+  </tr>
+)) }
+
               </tbody>
+                ) : (
+                    <p>Data Does Not Exist For This Employee</p>
+                  )
+                }
             </table>
           </div>
         </div>
