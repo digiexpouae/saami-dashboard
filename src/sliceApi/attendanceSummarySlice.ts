@@ -29,7 +29,6 @@ export const fetchAttendanceSummary = createAsyncThunk(
     payload: { fromDate: string; toDate: string; employeeId: string },
     thunkAPI
   ) => {
-    console.log(payload);
 
     try {
       const response = await api.post(GET_EMPLOYEE_SUMMARY, payload);
