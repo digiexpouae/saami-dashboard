@@ -7,6 +7,16 @@ import { createEmployee, getEmployees, updateEmployee, deleteEmployee } from '..
 import { RootState } from '../redux/store';
 import { useNavigate } from 'react-router-dom';
 
+interface Warehouse {
+  name: string;
+  id: number;  // Assuming each warehouse has an 'id' or other properties
+}
+
+interface Employee{
+  name:string;
+  assignedWarehouse:Warehouse
+  
+}
 const baseSchema = [
   {
     name: 'username',
@@ -50,6 +60,7 @@ const Employee = () => {
   const dispatch = useDispatch<any>();
   const warehouses = useSelector((state: RootState) => state.warehouse.warehouses);
   const employees = useSelector((state: RootState) => state.employee.employees);
+  console.log(employees)
 
   const [isForm, setIsForm] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false); // Moved inside the component
@@ -60,12 +71,15 @@ const Employee = () => {
     role: '',
     assignedWarehouse: '',
   });
-
+const [SelectedWarehouse, setSelectedWarehouse]=useState<any>('')
   useEffect(() => {
     dispatch(getEmployees());
     dispatch(fetchWarehouses());
   }, [dispatch]);
 
+  const handleWarehouseChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectedWarehouse(event.target.value);
+  };
   // Create dynamic form schema with populated warehouse options
 // Create dynamic form schema with conditionally included password field
 const formSchema = warehouses.length
@@ -159,6 +173,14 @@ const handleDelete = (employee) => {
       });
   }
 };
+{console.log(SelectedWarehouse)}
+
+const warehouse_filter = employees.filter((employee: Employee) => 
+  {if(employee.assignedWarehouse && employee.assignedWarehouse.name === SelectedWarehouse){
+    return employee
+  }}
+);
+console.log(warehouse_filter)
 
   const columns = [
     { header: 'Employee Name', accessorKey: 'username' },
@@ -179,7 +201,7 @@ const handleDelete = (employee) => {
             </button>
             <button className="text-blue-500" onClick={() => handleEdit(rowData)}>
               Edit
-            </button>
+            </button>0
             <button className="text-red-500" onClick={() => handleDelete(rowData)}>
               Delete
             </button>
@@ -188,13 +210,29 @@ const handleDelete = (employee) => {
       },
     },
   ];
+  const warehouse_dropdown = employees.map((employee: Employee) =>
+    employee.assignedWarehouse ? employee.assignedWarehouse.name : null // Extract the name or return null if no assignedWarehouse
+  );
+  console.log(warehouse_dropdown)
 
   return (
     <div>
+
+      <div className='flex justify-between'>
       <button onClick={() => setIsForm(true)} className="mb-4 px-4 py-2 bg-blue-500 text-white">
         Create Employee
       </button>
+      <div>
 
+  <select name="" id="" onChange={handleWarehouseChange}>
+    {warehouse_dropdown.map((elem:any, index:number) => (
+      <option key={index} value={elem}>
+        {elem}
+      </option>
+    ))}
+  </select>
+</div>
+      </div>
       {isForm ? (
         <RenderEmployeeForm
           schema={formSchema}
@@ -204,7 +242,7 @@ const handleDelete = (employee) => {
           onSubmit={handleSubmit}
         />
       ) : (
-        <TableComponent columns={columns} data={employees} isEmployeeData={false}/>
+        <TableComponent columns={columns} data={warehouse_filter} isEmployeeData={false}/>
       )}
     </div>
   );
