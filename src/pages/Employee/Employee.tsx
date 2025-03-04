@@ -15,7 +15,7 @@ interface Warehouse {
 interface Employee{
   name:string;
   assignedWarehouse:Warehouse
-  
+
 }
 const baseSchema = [
   {
@@ -175,7 +175,7 @@ const handleDelete = (employee) => {
 };
 {console.log(SelectedWarehouse)}
 
-const warehouse_filter = employees.filter((employee: Employee) => 
+const warehouse_filter = employees.filter((employee: Employee) =>
   {if(employee.assignedWarehouse && employee.assignedWarehouse.name === SelectedWarehouse){
     return employee
   }}
@@ -201,7 +201,7 @@ console.log(warehouse_filter)
             </button>
             <button className="text-blue-500" onClick={() => handleEdit(rowData)}>
               Edit
-            </button>0
+            </button>
             <button className="text-red-500" onClick={() => handleDelete(rowData)}>
               Delete
             </button>
